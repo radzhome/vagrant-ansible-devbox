@@ -55,7 +55,9 @@
       hostname: name=ubuntu-devbox
       # couldn't use template 
     - name: allow host forwarding
-      template: src=ssh_config.ex dest=~/.ssh/config
+      template: 
+        src=templates/ssh_config 
+        dest=~/.ssh/config
     - name: set timezone variables
       copy: content='America/Toronto'
             dest=/etc/timezone
