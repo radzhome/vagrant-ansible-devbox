@@ -4,12 +4,12 @@
   vars:
     host_name: ubuntu-devbox
   tasks:
+    - apt_repository: repo=ppa:ubuntugis/ppa
     - name: update apt
       apt: update_cache=yes
     - apt: upgrade=safe
-    - apt_repository: repo='ppa:ubuntugis/ppa'
 #    - apt_repository: repo='ppa:ubuntugis/ubuntugis-unstable'
-    - name: install required packages
+    - name: install required python
       apt: name={{ item }} state=present
       with_items:
         - python-pip 
@@ -17,29 +17,40 @@
         - build-essential
         - python-setuptools
         - openssh-server
+        - python-imaging
+        - ipython
+        - python-docutils
+        - python-software-properties
+        - python-mapscript
+        - python-crypto
+    - name: install avahi, exim, git, subversion, nginx, nodejs, vim
+      apt: name={{ item }} state=present
+      with_items:
         - avahi-daemon
         - exim4
         - git-core
         - git-svn
         - subversion
-        - python-imaging
-        - python-psycopg2
-        - ipython 
-        - python-docutils
-        - python-software-properties
-        - postgresql-server-dev-9.3 
+        - nginx
+        - vim
+        - nodejs
+    - name: install postgres postgis
+      apt: name={{ item }} state=present
+      with_items:
+        - postgresql
+#        - postgresql-server-dev-9.3 
         - postgis 
-        - python-mapscript 
+        - python-psycopg2
         - python-gdal
         - libproj-dev
         - gdal-bin
-        - nodejs
-        - python-crypto 
         - libpq-dev 
+    - name: install image libraries
+      apt: name={{ item }} state=present
+      with_items:
         - libjpeg62-dev 
         - zlib1g-dev 
         - libfreetype6-dev 
-        - build-essential
     - name: install unattended upgrades package
       apt: name=unattended-upgrades
       notify:
@@ -48,17 +59,18 @@
     - pip: name=pip
     - pip: name=Pillow
     - pip: name=fabric
+    - pip: name=gunicorn
     #- pip: name='git+https://<username>@bitbucket.org/trapeze/boulanger.git'
     - name: create locale, ensure exists
       locale_gen: name=en_CA.UTF-8 state=present
-    - command: /usr/sbin/update-locale LANG=en_CA.UTF-8
+    - command: update-locale LANG=en_CA.UTF-8 # usr/sbin
     - name: update hostname
       hostname: name=ubuntu-devbox
       # couldn't use template 
     - name: allow host forwarding
       template: 
-        src=templates/ssh_config 
-        dest=~/.ssh/config
+        src=templates/ssh_config.j2
+        dest=/home/vagrant/.ssh/config
     - name: set timezone variables
       copy: content='America/Toronto'
             dest=/etc/timezone
