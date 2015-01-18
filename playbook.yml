@@ -24,6 +24,7 @@
         - python-software-properties
         - python-mapscript
         - python-crypto
+        - bash-completion
     - name: install avahi, exim, git, subversion, nginx, nodejs, vim
       apt: name={{ item }} state=present
       with_items:
