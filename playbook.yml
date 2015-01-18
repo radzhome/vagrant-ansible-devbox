@@ -1,14 +1,15 @@
 ---
-- hosts: all #ubuntu_devbox
+- hosts: all
   sudo: true
+# User ? 
   vars:
-    host_name: ubuntu-devbox
+    host_name: ubuntu-vagrant-devbox
   tasks:
-    - apt_repository: repo=ppa:ubuntugis/ppa
+    - name: add ubuntugis repo to /etc/apt/sources.list/
+      apt_repository: repo=ppa:ubuntugis/ubuntugis-unstable
     - name: update apt
       apt: update_cache=yes
     - apt: upgrade=safe
-#    - apt_repository: repo='ppa:ubuntugis/ubuntugis-unstable'
     - name: install required python
       apt: name={{ item }} state=present
       with_items:
@@ -65,8 +66,7 @@
       locale_gen: name=en_CA.UTF-8 state=present
     - command: update-locale LANG=en_CA.UTF-8 # usr/sbin
     - name: update hostname
-      hostname: name=ubuntu-devbox
-      # couldn't use template 
+      hostname: name={{ host_name }}
     - name: allow host forwarding
       template: 
         src=templates/ssh_config.j2
