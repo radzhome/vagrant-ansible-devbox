@@ -1,0 +1,79 @@
+---
+- hosts: all #ubuntu_devbox
+  sudo: true
+  vars:
+    host_name: ubuntu-devbox
+  tasks:
+    - name: update apt
+      apt: update_cache=yes
+    - apt: upgrade=safe
+    - apt_repository: repo='ppa:ubuntugis/ubuntugis-unstable'
+    - name: install required packages
+      apt: name={{ item }} state=present
+      with_items:
+        - python-pip 
+        - python-dev 
+        - build-essential
+        - python-setuptools
+        - openssh-server
+        - avahi-daemon
+        - exim4
+        - git-core
+        - git-svn
+        - subversion
+        - python-imaging
+        - python-psycopg2
+        - ipython 
+        - python-docutils
+        - python-software-properties
+        - postgresql-server-dev-9.3 
+        - postgis 
+        - python-mapscript 
+        - python-gdal
+        - libproj-dev
+        - gdal-bin
+        - nodejs
+        - python-crypto 
+        - libpq-dev 
+        - libjpeg62-dev 
+        - zlib1g-dev 
+        - libfreetype6-dev 
+        - build-essential
+    - name: install unattended upgrades package
+      apt: name=unattended-upgrades
+      notify:
+        - dpkg reconfigue unattended
+    - pip: name=setuptools
+    - pip: name=pip
+    - pip: name=Pillow
+    - pip: name=fabric
+    #- pip: name='git+https://<username>@bitbucket.org/trapeze/boulanger.git'
+    - name: create locale, ensure exists
+      locale_gen: name=en_CA.UTF-8 state=present
+    - command: /usr/sbin/update-locale LANG=en_CA.UTF-8
+    - name: update hostname
+      hostname: name=ubuntu-devbox
+      # couldn't use template 
+    - name: allow host forwarding
+      template: src=ssh_config.ex dest=~/.ssh/config
+    - name: set timezone variables
+      copy: content='America/Toronto'
+            dest=/etc/timezone
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+      notify:
+        - update timezone
+  handlers:
+    - name: update timezone
+      command: dpkg-reconfigure --frontend noninteractive tzdata
+    - name: dpkg reconfigure
+      command: >
+        dpkg-reconfigure unattended
+        --frontend noninteractive
+        -plow unattended-upgrades
+# sudo dpkg-reconfigure exim4-config
+#  svn export https://office.trapeze.com/svn/Hosting/templates/bashrc ~/.bashrc
+#  svn export https://office.trapeze.com/svn/Hosting/templates/profile ~/.profile
+#  source ~/.bashrc
