@@ -1,9 +1,10 @@
 ---
-- hosts: all
+- hosts: all # ubuntu-devbox
   sudo: true
-# User ? 
+#  user: vagrant #( use default) 
   vars:
     host_name: ubuntu-vagrant-devbox
+    user: vagrant
   tasks:
     - name: add ubuntugis repo to /etc/apt/sources.list/
       apt_repository: repo=ppa:ubuntugis/ubuntugis-unstable
@@ -39,14 +40,22 @@
     - name: install postgres postgis
       apt: name={{ item }} state=present
       with_items:
+        - postgresql-client-common
         - postgresql
-#        - postgresql-server-dev-9.3 
         - postgis 
         - python-psycopg2
         - python-gdal
         - libproj-dev
         - gdal-bin
         - libpq-dev 
+    #- name: init postgres database
+    #  command: service postgresql initdb
+    #  #        creates=/var/lib/pgsql/data/postgresql.conf
+    # psql: https://github.com/mattwillsher/ansible-product-playbooks/blob/master/postgresql/install_server.yml
+    - name: start postgres and enable at boot
+      service: name=postgresql
+               enabled=yes
+               state=started      
     - name: install image libraries
       apt: name={{ item }} state=present
       with_items:
@@ -71,7 +80,7 @@
     - name: allow host forwarding
       template: 
         src=templates/ssh_config.j2
-        dest=/home/vagrant/.ssh/config
+        dest=/home/{{ user }}/.ssh/config
     - name: set timezone variables
       copy: content='America/Toronto'
             dest=/etc/timezone
@@ -81,6 +90,18 @@
             backup=yes
       notify:
         - update timezone
+    - name: update bashrc PYTHONPATH
+      lineinfile:
+        dest=/home/{{ user }}/.bashrc
+        line="export PYTHONPATH=.:..:../lib"
+    # Cannot find file, not needed here anyway
+    #- name: source bashrc
+    #  command: source /home/{{ user }}/.bashrc
+    # Default config is fine
+    #- name: Exim4 Configuration
+    #  template: src=update-exim4.conf.j2 dest=/etc/exim4/update-exim4.conf.conf
+    #  tags: [exim]
+    #  notify: update exim4.conf
   handlers:
     - name: update timezone
       command: dpkg-reconfigure --frontend noninteractive tzdata
@@ -89,7 +110,9 @@
         dpkg-reconfigure unattended
         --frontend noninteractive
         -plow unattended-upgrades
-# sudo dpkg-reconfigure exim4-config
-#  svn export https://office.trapeze.com/svn/Hosting/templates/bashrc ~/.bashrc
-#  svn export https://office.trapeze.com/svn/Hosting/templates/profile ~/.profile
-#  source ~/.bashrc
+    - name: restart postgresql
+      service: name=postgresql state=restarted
+    - name: restart nginx
+      service: name=nginx state=restarted
+    - name: update exim4.conf
+      shell: /usr/sbin/update-exim4.conf

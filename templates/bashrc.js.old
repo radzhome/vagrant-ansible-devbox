@@ -100,4 +100,5 @@ fi
 
 umask 0002
 
+#export PATH=$PATH:/local/bin
 export PYTHONPATH=.:..:../lib
