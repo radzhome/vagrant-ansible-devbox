@@ -12,6 +12,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #config.ssh.password = "123TestPass"
     # If true, then any SSH connections made will enable agent forwarding.
     config.ssh.forward_agent = true
+    # Didn't change the default cert
+    #config.ssh.private_key_path = "~/.ssh/id_rsa"
 
     # Virtuaqlbox options, default is 512MB memory
     config.vm.provider "virtualbox" do |v|
@@ -41,8 +43,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder ".", "/vagrant", disabled: true
     # TODO: change the <local_user> variable
     #config.vm.synced_folder "/home/<local_user>", "/home/<local_user>" 
-    config.vm.synced_folder "/home/devbox_user", "/home/vagrant", create: true
+    #config.vm.synced_folder "/home/<local_user>", "/home/vagrant", create: true
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/<guest_home>/projects"
-  
+    config.vm.synced_folder "/home/<local_home>/projects", "/home/vagrant/projects"
+
   #end
 end
