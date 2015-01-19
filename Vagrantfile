@@ -9,7 +9,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # This will change default user away from vagrant, and use password not cert
     #config.ssh.username = "devbox-user"
-    #config.ssh.password = "123TestPass"
+    #config.ssh.password = "123TestPass"  # vagrant (default)
     # If true, then any SSH connections made will enable agent forwarding.
     config.ssh.forward_agent = true
     # Didn't change the default cert

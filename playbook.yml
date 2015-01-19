@@ -7,6 +7,8 @@
     user: vagrant
   tasks:
     #- user: name={{ user }} shell=/bin/bash groups=admins,developers append=yes
+    - name: add node.js repo to /etc/apt-/sources.list/
+      apt_repository: repo=ppa:chris-lea/node.js
     - name: add ubuntugis repo to /etc/apt/sources.list/
       apt_repository: repo=ppa:ubuntugis/ubuntugis-unstable
     - name: update apt
@@ -38,6 +40,7 @@
         - nginx
         - vim
         - nodejs
+#        - npm
     - name: install postgres postgis
       apt: name={{ item }} state=present
       with_items:
@@ -117,3 +120,4 @@
       service: name=nginx state=restarted
     - name: update exim4.conf
       shell: /usr/sbin/update-exim4.conf
+# How to install grunt, grunt-cli, grunt-init locally ?
