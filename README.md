@@ -10,3 +10,8 @@ Installs Ubuntu devbox with the following
 * pip: fabric, Pillow, gunicorn
 * nodejs
 * git
+
+# usage
+
+- Edit the vagrant file to use 64-bit ubuntu, 32-bit is default
+- Include certs in template/ssh will be placed in users .ssh directory & added to ssh-agent
