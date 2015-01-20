@@ -21,9 +21,19 @@ Installs Ubuntu devbox with the following
 
 3) Install [Vagrant](https://www.vagrantup.com/downloads.html)
 
-4) Edit the Vagrantfile to use 64-bit ubuntu, 32-bit is default.
+4) Download this repository. i.e.:
 
-5) Include all required private keys in your ~/.ssh folder starting with the name id_rsa i.e. for bitbucket access
+    cd ~
+    git clone https://github.com/radlws/vagrant-ansible-devbox.git
+    cd vagrant-ansible-devbox
+
+4b) Edit the Vagrantfile to use 64-bit ubuntu, 32-bit is default. i.e.
+
+    config.vm.box = "ubuntu/trusty32"
+    # or
+    config.vm.box = "ubuntu/trusty64"
+
+5) Include all required private keys in your ~/.ssh folder starting with the name id_rsa i.e. for bitbucket access.
 
 6) Include shared projects in ~/projects, make the directory it it doesn't exist. Can be empty to start
 
