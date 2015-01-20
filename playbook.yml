@@ -1,14 +1,14 @@
 ---
 - hosts: all # ubuntu-devbox
   sudo: true
-#  user: vagrant #( use default) 
+  user: vagrant # (use default: vagrant) 
+  sudo_user: root  # (use default: root)
   vars:
     host_name: ubuntu-vagrant-devbox
     user: vagrant
-    git_username: Creative_Dev
-    git_email: your@bitbucket.acc
+    git_username: Creative_Dev  # update
+    git_email: your@bitbucket.acc  # update
   tasks:
-    #- command: PIP_NO_INPUT=1 pip install git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
     #- command: pip --no-input install git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
     - name: allow host forwarding
       template:
@@ -16,8 +16,7 @@
         dest=/home/{{ user }}/.ssh/config
     - name: change ssh folder permissions
       file: path=/home/vagrant/.ssh owner={{ user }} group={{ user }} state=directory recurse=yes
-    # does not work, private key error?
-    #- name: install boulanger
+    # does not work, hangs ...
     #  pip: name=git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
     - name: add node.js repo to /etc/apt-/sources.list/
       apt_repository: repo=ppa:chris-lea/node.js
@@ -64,8 +63,6 @@
     #    - grunt-cli
     #    - grunt-init
     #    - bower
-        #- yo
-
     - name: install npm packages
       npm: name= {{ item }} global=yes
       with_items:
@@ -84,10 +81,6 @@
         - gdal-bin
         - libpq-dev 
         - postgresql-9.3-postgis-scripts
-    #- name: init postgres database
-    #  command: service postgresql initdb
-    #  #        creates=/var/lib/pgsql/data/postgresql.conf
-    # psql: https://github.com/mattwillsher/ansible-product-playbooks/blob/master/postgresql/install_server.yml
     - name: start postgres and enable at boot
       service: name=postgresql
                enabled=yes
@@ -96,11 +89,6 @@
       apt: name=unattended-upgrades
       notify:
         - dpkg reconfigue unattended
-    # TODO: put in requirements.txt
-    # TODO: upgrade pip
-    #sudo apt-get remove python-pip
-    #wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
-    #sudo python get-pip.py
     - pip: name=setuptools
     - pip: name=pip version=6.0.6
     - pip: name=Pillow
@@ -108,7 +96,6 @@
     - pip: name=gunicorn
     - pip: name=fogbugz
     - pip: name=BeautifulSoup
-#    - pip: name='git+https://<username>@bitbucket.org/trapeze/boulanger.git'
     - name: create locale, ensure exists
       locale_gen: name=en_CA.UTF-8 state=present
     - command: update-locale LANG=en_CA.UTF-8 # usr/sbin
@@ -132,14 +119,6 @@
       lineinfile:
         dest=/home/{{ user }}/.bashrc
         line="export PYTHONPATH=.:..:../lib"
-    # Cannot find file, not needed here anyway
-    #- name: source bashrc
-    #  command: source /home/{{ user }}/.bashrc
-    # Default config is fine
-    #- name: Exim4 Configuration
-    #  template: src=update-exim4.conf.j2 dest=/etc/exim4/update-exim4.conf.conf
-    #  tags: [exim]
-    #  notify: update exim4.conf
   handlers:
     - name: update timezone
       command: dpkg-reconfigure --frontend noninteractive tzdata
@@ -154,4 +133,3 @@
       service: name=nginx state=restarted
     - name: update exim4.conf
       shell: /usr/sbin/update-exim4.conf
-# How to install grunt, grunt-cli, grunt-init locally ?
