@@ -35,7 +35,7 @@
     - name: install required python
       apt: name={{ item }} state=present
       with_items:
-        #- python-pip 
+        - python-pip 
         - python-dev 
         - build-essential
         - python-setuptools
@@ -55,10 +55,8 @@
         - git-core
         - git-svn
         - subversion
-        #- nginx
         - vim
         - nodejs
-#        - npm
     # TODO: nnot working
     #- name: install npm packages
     #  command: npm install -g $item
@@ -67,13 +65,13 @@
     #    - grunt-init
     #    - bower
         #- yo
-# Not ready until v1.2.
-# - name: Node.js | Install packages
-#   npm: name=$item global=yes
-#   with_items:
-#     - yo
-#     - grunt-cli
-#     - bower
+
+    - name: Node.js | Install packages
+      npm: name=$item global=yes
+      with_items:
+        - grunt-cli
+        - bower
+        - grunt-init
     - name: install postgres postgis
       apt: name={{ item }} state=present
       with_items:
