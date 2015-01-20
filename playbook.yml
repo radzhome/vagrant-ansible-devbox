@@ -5,7 +5,7 @@
   vars:
     host_name: ubuntu-vagrant-devbox
     user: vagrant
-    git_name: Creative Dev
+    git_username: Creative_Dev
     git_email: your@bitbucket.acc
   tasks:
     #- command: PIP_NO_INPUT=1 pip install git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
