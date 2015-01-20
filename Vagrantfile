@@ -45,7 +45,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #config.vm.synced_folder "/home/<local_user>", "/home/<local_user>" 
     #config.vm.synced_folder "/home/<local_user>", "/home/vagrant", create: true
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/<guest_home>/projects"
-    config.vm.synced_folder "/home/<local_home>/projects", "/home/vagrant/projects"
-
+    #config.vm.synced_folder "/home/<local_home>/projects", "/home/vagrant/projects"
+    #config.vm.synced_folder "~/projects", "/home/vagrant/projects"
+    # Copy ssh keys
+    config.vm.synced_folder "~/.ssh", "/host_ssh", create: true
+    config.vm.provision :shell, 
+    :inline => "cp -r /host_ssh/id* /home/vagrant/.ssh/"
+    #:inline => "cp -r /host_ssh/id* ~/.ssh/" # no work
   #end
 end
