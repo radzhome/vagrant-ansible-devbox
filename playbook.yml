@@ -59,6 +59,20 @@
         - vim
         - nodejs
 #        - npm
+    - name: install npm packages
+      command: npm install -g $item
+      with_items:
+        - grunt-cli
+        - grunt-init
+        - bower
+        #- yo
+# Not ready until v1.2.
+# - name: Node.js | Install packages
+#   npm: name=$item global=yes
+#   with_items:
+#     - yo
+#     - grunt-cli
+#     - bower
     - name: install postgres postgis
       apt: name={{ item }} state=present
       with_items:
