@@ -14,4 +14,7 @@ Installs Ubuntu devbox with the following
 # usage
 
 - Edit the vagrant file to use 64-bit ubuntu, 32-bit is default
-- Include certs in template/ssh will be placed in users .ssh directory & added to ssh-agent
+- Include all required private keys in your ~/.ssh folder starting with the name id_rsa
+- Include shared projects in ~/projects
+- Run: vagrant ssh 
+- You may start django server using: manage.py runserver 0.0.0.0:8000  and access it at localhost:9000 on your host machine.
