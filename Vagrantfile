@@ -33,6 +33,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #config.vm.network :public_network
     #config.vm.network :private_network, ip: '192.168.50.5'
 
+    command = "cp -r /host_ssh/id* /home/vagrant/.ssh/"
+    config.vm.provision :shell, :inline => command
+
     # Enable provisioning with ansible, specifying the playbook file
     config.vm.provision :ansible do |ansible|
       ansible.playbook = "playbook.yml"
@@ -46,11 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #config.vm.synced_folder "/home/<local_user>", "/home/vagrant", create: true
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/<guest_home>/projects"
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/vagrant/projects"
-    #config.vm.synced_folder "~/projects", "/home/vagrant/projects"
-    # Copy ssh keys
+    config.vm.synced_folder "~/projects", "/home/vagrant/projects"
     config.vm.synced_folder "~/.ssh", "/host_ssh", create: true
-    config.vm.provision :shell, 
-    :inline => "cp -r /host_ssh/id* /home/vagrant/.ssh/"
-    #:inline => "cp -r /host_ssh/id* ~/.ssh/" # no work
   #end
 end

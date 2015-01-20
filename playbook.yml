@@ -6,7 +6,11 @@
     host_name: ubuntu-vagrant-devbox
     user: vagrant
   tasks:
+    - name: change ssh folder permissions
+      file: path=/home/vagrant/.ssh owner={{ user }} group={{ user }} state=directory recurse=yes
     #- user: name={{ user }} shell=/bin/bash groups=admins,developers append=yes
+    # TODO: need git config setup to know what user name ?
+    #- pip: name=git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
     - name: add node.js repo to /etc/apt-/sources.list/
       apt_repository: repo=ppa:chris-lea/node.js
     - name: add ubuntugis repo to /etc/apt/sources.list/
@@ -18,7 +22,6 @@
       apt: name={{ item }} state=present
       with_items:
         - libjpeg-dev
-        #- libjpeg62-dev 
         - zlib1g-dev
         - libfreetype6-dev
     - name: install required python
@@ -44,7 +47,7 @@
         - git-core
         - git-svn
         - subversion
-        - nginx
+        #- nginx
         - vim
         - nodejs
 #        - npm
@@ -71,12 +74,15 @@
       apt: name=unattended-upgrades
       notify:
         - dpkg reconfigue unattended
+    # TODO: put in requirements.txt
     - pip: name=setuptools
     - pip: name=pip
     - pip: name=Pillow
     - pip: name=fabric
     - pip: name=gunicorn
-    #- pip: name='git+https://<username>@bitbucket.org/trapeze/boulanger.git'
+    - pip: name=fogbugz
+    - pip: name=BeautifulSoup
+#    - pip: name='git+https://<username>@bitbucket.org/trapeze/boulanger.git'
     - name: create locale, ensure exists
       locale_gen: name=en_CA.UTF-8 state=present
     - command: update-locale LANG=en_CA.UTF-8 # usr/sbin
