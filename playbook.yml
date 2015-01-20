@@ -5,12 +5,20 @@
   vars:
     host_name: ubuntu-vagrant-devbox
     user: vagrant
+    git_name: Creative Dev
+    git_email: your@bitbucket.acc
   tasks:
+    #- command: PIP_NO_INPUT=1 pip install git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
+    #- command: pip --no-input install git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
+    - name: allow host forwarding
+      template:
+        src=templates/ssh_config.j2
+        dest=/home/{{ user }}/.ssh/config
     - name: change ssh folder permissions
       file: path=/home/vagrant/.ssh owner={{ user }} group={{ user }} state=directory recurse=yes
-    #- user: name={{ user }} shell=/bin/bash groups=admins,developers append=yes
-    # TODO: need git config setup to know what user name ?
-    #- pip: name=git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
+    # does not work, private key error?
+    #- name: install boulanger
+    #  pip: name=git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
     - name: add node.js repo to /etc/apt-/sources.list/
       apt_repository: repo=ppa:chris-lea/node.js
     - name: add ubuntugis repo to /etc/apt/sources.list/
@@ -27,7 +35,7 @@
     - name: install required python
       apt: name={{ item }} state=present
       with_items:
-        - python-pip 
+        #- python-pip 
         - python-dev 
         - build-essential
         - python-setuptools
@@ -62,6 +70,7 @@
         - libproj-dev
         - gdal-bin
         - libpq-dev 
+        - postgresql-9.3-postgis-scripts
     #- name: init postgres database
     #  command: service postgresql initdb
     #  #        creates=/var/lib/pgsql/data/postgresql.conf
@@ -75,8 +84,12 @@
       notify:
         - dpkg reconfigue unattended
     # TODO: put in requirements.txt
+    # TODO: upgrade pip
+    #sudo apt-get remove python-pip
+    #wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py
+    #sudo python get-pip.py
     - pip: name=setuptools
-    - pip: name=pip
+    - pip: name=pip version=6.0.6
     - pip: name=Pillow
     - pip: name=fabric
     - pip: name=gunicorn
@@ -88,10 +101,11 @@
     - command: update-locale LANG=en_CA.UTF-8 # usr/sbin
     - name: update hostname
       hostname: name={{ host_name }}
-    - name: allow host forwarding
+    - name: create gitconfig
+      sudo: false
       template: 
-        src=templates/ssh_config.j2
-        dest=/home/{{ user }}/.ssh/config
+        src=templates/gitconfig.j2
+        dest=/home/{{ user }}/.gitconfig
     - name: set timezone variables
       copy: content='America/Toronto'
             dest=/etc/timezone

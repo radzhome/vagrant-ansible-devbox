@@ -35,6 +35,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     command = "cp -r /host_ssh/id* /home/vagrant/.ssh/"
     config.vm.provision :shell, :inline => command
+    #config.vm.provision :shell, :inline => "cp -r /host_ssh/id* /root/.ssh/"
+    #config.vm.provision :shell, :inline => "ssh-keygen -R bitbucket.org"
+    #config.vm.provision :shell, :inline => "ssh-keyscan bitbucket.org >> /home/vagrant/.ssh/known_hosts"
+    #config.vm.provision :shell, :inline => "ssh-keygen -R github.com"
+    #config.vm.provision :shell, :inline => "ssh-keyscan github.com >> /home/vagrant/.ssh/known_hosts"
 
     # Enable provisioning with ansible, specifying the playbook file
     config.vm.provision :ansible do |ansible|
