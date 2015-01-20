@@ -64,7 +64,7 @@
     #    - grunt-init
     #    - bower
     - name: install npm packages
-      npm: name= {{ item }} global=yes
+      npm: name={{ item }} global=yes
       with_items:
         - grunt-cli
         - bower
