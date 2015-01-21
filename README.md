@@ -33,6 +33,8 @@ Installs Ubuntu devbox with the following
     # or
     config.vm.box = "ubuntu/trusty64"
 
+Update other options if necessary, i.e. nfs for synced_folders or change memory or cpu amounts.
+
 6) Update the playbook.yml vars for git_username and git_email used for bitbucket auth.
 
 7) Include all required private keys in your ~/.ssh folder starting with the name id_rsa i.e. for bitbucket access.
