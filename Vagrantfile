@@ -5,7 +5,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.define :ubuntuvm do |ubuntu_config|
     # Every Vagrant env. requires a box to build off of
     #ubuntu_config.vm.box = "ubuntu/trusty64"
-    config.vm.box = "ubuntu/trusty32"
+    config.vm.box = "ubuntu/trusty64"
 
     # This will change default user away from vagrant, and use password not cert
     #config.ssh.username = "devbox-user"
@@ -54,7 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #config.vm.synced_folder "/home/<local_user>", "/home/vagrant", create: true
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/<guest_home>/projects"
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/vagrant/projects"
-    config.vm.synced_folder "~/projects", "/home/vagrant/projects"
-    config.vm.synced_folder "~/.ssh", "/host_ssh", create: true
+    config.vm.synced_folder "~/projects", "/home/vagrant/projects", nfs: true
+    config.vm.synced_folder "~/.ssh", "/host_ssh", create: true, nfs: true
   #end
 end
