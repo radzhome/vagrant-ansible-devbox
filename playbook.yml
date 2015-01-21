@@ -22,6 +22,8 @@
       apt_repository: repo=ppa:chris-lea/node.js
     - name: add ubuntugis repo to /etc/apt/sources.list/
       apt_repository: repo=ppa:ubuntugis/ubuntugis-unstable
+    - name: add git repo to /etc/apt/sources.list/
+      apt_repository: repo=ppa:git-core/ppa
     - name: update apt
       apt: update_cache=yes
     - apt: upgrade=safe
