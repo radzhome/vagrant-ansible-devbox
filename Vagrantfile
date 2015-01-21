@@ -18,10 +18,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Virtuaqlbox options, default is 512MB memory
     config.vm.provider "virtualbox" do |v|
       v.memory = 1024
-      #v.cpus = 2
-    end
-    # Give a name to the vm in virtualbox
-    config.vm.provider "virtualbox" do |v|
+      v.cpus = 4
+      #v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
       v.name = "ubuntu-devbox"
     end
 
