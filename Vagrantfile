@@ -21,6 +21,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.cpus = 4
       #v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
       v.name = "ubuntu-devbox"
+      # use hosts DNS
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
 
     # Forward ports from guest to host
@@ -52,7 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #config.vm.synced_folder "/home/<local_user>", "/home/vagrant", create: true
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/<guest_home>/projects"
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/vagrant/projects"
-    config.vm.synced_folder "~/projects", "/home/vagrant/projects", nfs: true
+    config.vm.synced_folder "~/projects", "/home/vagrant/projects" #, nfs: true #nfs requires private network
     config.vm.synced_folder "~/.ssh", "/host_ssh", create: true, nfs: true
   #end
 end
