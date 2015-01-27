@@ -6,6 +6,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Every Vagrant env. requires a box to build off of
     #ubuntu_config.vm.box = "ubuntu/trusty64"
     config.vm.box = "ubuntu/trusty64"
+    #config.vm.box_url = 'https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box'
+  
 
     # This will change default user away from vagrant, and use password not cert
     #config.ssh.username = "devbox-user"
@@ -32,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network "forwarded_port", guest: 8001, host: 9001
     config.vm.network "forwarded_port", guest: 8002, host: 9002
     #config.vm.network :public_network
-    #config.vm.network :private_network, ip: '192.168.50.5'
+    config.vm.network :private_network, ip: '192.168.111.222'
 
     command = "cp -r /host_ssh/id* /home/vagrant/.ssh/"
     config.vm.provision :shell, :inline => command
@@ -55,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #config.vm.synced_folder "/home/<local_user>", "/home/vagrant", create: true
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/<guest_home>/projects"
     #config.vm.synced_folder "/home/<local_home>/projects", "/home/vagrant/projects"
-    config.vm.synced_folder "~/projects", "/home/vagrant/projects" #, nfs: true #nfs requires private network
-    config.vm.synced_folder "~/.ssh", "/host_ssh", create: true, nfs: true
+    config.vm.synced_folder "~/projects", "/home/vagrant/projects", nfs: true #nfs requires private network
+    config.vm.synced_folder "~/.ssh", "/host_ssh", create: true #, nfs: true
   #end
 end
