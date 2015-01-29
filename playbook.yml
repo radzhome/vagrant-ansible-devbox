@@ -36,6 +36,7 @@
         - libjpeg-dev
         - zlib1g-dev
         - libfreetype6-dev
+      run_once: true
     - name: install required python
       apt: name={{ item }} state=present
       with_items:
@@ -51,6 +52,7 @@
         - python-mapscript
         - python-crypto
         - bash-completion
+      run_once: true
     - name: install avahi, exim, git, subversion, nginx, nodejs, vim
       apt: name={{ item }} state=present
       with_items:
@@ -61,6 +63,7 @@
         - subversion
         - vim
         - nodejs
+      run_once: true
     - name: install npm packages
       npm: name={{ item }} global=yes
       with_items:
@@ -68,6 +71,7 @@
         - grunt-cli
         - bower
         - grunt-init
+      run_once: true
     - name: install postgres postgis
       apt: name={{ item }} state=present
       with_items:
@@ -80,14 +84,17 @@
         - gdal-bin
         - libpq-dev 
         - postgresql-9.3-postgis-scripts
+      run_once: true
     - name: start postgres and enable at boot
       service: name=postgresql
                enabled=yes
                state=started      
+      run_once: true
     - name: install unattended upgrades package
       apt: name=unattended-upgrades
       notify:
         - dpkg reconfigue unattended
+      run_once: true
     - pip: name=setuptools
     - pip: name=pip version=6.0.6
     - pip: name=Pillow
@@ -112,8 +119,10 @@
             group=root
             mode=0644
             backup=yes
+      ignore_errors: yes
       notify:
         - update timezone
+      run_once: true
     - name: update bashrc PYTHONPATH
       lineinfile:
         dest=/home/{{ user }}/.bashrc
