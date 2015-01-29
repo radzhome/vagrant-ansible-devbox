@@ -20,10 +20,13 @@
     #  pip: name=git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
     - name: add node.js repo to /etc/apt-/sources.list/
       apt_repository: repo=ppa:chris-lea/node.js
+      run_once: true
     - name: add ubuntugis repo to /etc/apt/sources.list/
       apt_repository: repo=ppa:ubuntugis/ubuntugis-unstable
+      run_once: true
     - name: add git repo to /etc/apt/sources.list/
       apt_repository: repo=ppa:git-core/ppa
+      run_once: true
     - name: update apt
       apt: update_cache=yes
     - apt: upgrade=safe
@@ -58,16 +61,10 @@
         - subversion
         - vim
         - nodejs
-    # TODO: nnot working
-    #- name: install npm packages
-    #  command: npm install -g $item
-    #  with_items:
-    #    - grunt-cli
-    #    - grunt-init
-    #    - bower
     - name: install npm packages
       npm: name={{ item }} global=yes
       with_items:
+        - grunt
         - grunt-cli
         - bower
         - grunt-init
