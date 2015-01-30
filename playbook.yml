@@ -53,7 +53,7 @@
         - python-crypto
         - bash-completion
       run_once: true
-    - name: install avahi, exim, git, subversion, nginx, nodejs, vim
+    - name: install avahi, exim, git, subversion, nginx, nodejs, vim, gettext
       apt: name={{ item }} state=present
       with_items:
         - avahi-daemon
@@ -63,6 +63,7 @@
         - subversion
         - vim
         - nodejs
+        - gettext
       run_once: true
     - name: install npm packages
       npm: name={{ item }} global=yes
