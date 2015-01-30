@@ -18,7 +18,7 @@ Installs Ubuntu devbox with the following
 
 1) Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 
-2) Install Ansible:
+2) Install Ansible (You need Xcode for this on the Mac, see App Store):
      
      sudo pip install ansible
 
