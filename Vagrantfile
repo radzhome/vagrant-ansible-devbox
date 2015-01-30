@@ -23,6 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.cpus = 4
       #v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
       v.name = "ubuntu-devbox"
+      v.gui = true
       # use hosts DNS
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
