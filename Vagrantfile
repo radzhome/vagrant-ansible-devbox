@@ -35,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network "forwarded_port", guest: 8001, host: 9001
     config.vm.network "forwarded_port", guest: 8002, host: 9002
     #config.vm.network :public_network
-    config.vm.network :private_network, ip: '192.168.111.222' #ensure does not conflict
+    config.vm.network :private_network, ip: '192.168.222.220' #ensure does not conflict
 
     command = "cp -r /host_ssh/id* /home/vagrant/.ssh/"
     config.vm.provision :shell, :inline => command
