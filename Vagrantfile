@@ -23,7 +23,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       v.cpus = 4
       #v.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
       v.name = "ubuntu-devbox"
-      v.gui = true
+      #v.gui = true
       # use hosts DNS
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
@@ -35,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network "forwarded_port", guest: 8001, host: 9001
     config.vm.network "forwarded_port", guest: 8002, host: 9002
     #config.vm.network :public_network
-    config.vm.network :private_network, ip: '192.168.111.222'
+    config.vm.network :private_network, ip: '192.168.111.222' #ensure does not conflict
 
     command = "cp -r /host_ssh/id* /home/vagrant/.ssh/"
     config.vm.provision :shell, :inline => command
