@@ -9,6 +9,9 @@
     git_username: Creative_Dev  # update
     git_email: your@bitbucket.acc  # update
   tasks:
+    - name:
+      git: repo=ssh://git@bitbucket.org:trapeze/boulanger.git
+      dest=/home/vagrant/test
     - name: retrieve the ssh keys in dir
       command: ls /host_ssh/id*
       register: cert_files
