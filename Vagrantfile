@@ -37,8 +37,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #config.vm.network :public_network
     config.vm.network :private_network, ip: '192.168.222.220' #ensure does not conflict
 
-    command = "cp -r /host_ssh/id* /home/vagrant/.ssh/"
-    config.vm.provision :shell, :inline => command
+    #command = "cp -r /host_ssh/id* /home/vagrant/.ssh/"
+    #config.vm.provision :shell, :inline => command
     #config.vm.provision :shell, :inline => "cp -r /host_ssh/id* /root/.ssh/"
     #config.vm.provision :shell, :inline => "ssh-keygen -R bitbucket.org"
     #config.vm.provision :shell, :inline => "ssh-keyscan bitbucket.org >> /home/vagrant/.ssh/known_hosts"
