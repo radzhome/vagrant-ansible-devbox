@@ -12,6 +12,7 @@
     - name:
       git: repo=ssh://git@bitbucket.org:trapeze/boulanger.git
       dest=/home/vagrant/test
+      sudo: false
     - name: retrieve the ssh keys in dir
       command: ls /host_ssh/id*
       register: cert_files
