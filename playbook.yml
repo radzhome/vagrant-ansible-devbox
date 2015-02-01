@@ -1,6 +1,7 @@
 ---
 - hosts: all # ubuntu-devbox
   sudo: true
+  gather_facts: false
   user: vagrant # (use default: vagrant) 
   sudo_user: root  # (use default: root)
   vars:
@@ -9,17 +10,20 @@
     git_username: Creative_Dev  # update
     git_email: your@bitbucket.acc  # update
   tasks:
-    - name:
-      git: repo=ssh://git@bitbucket.org:trapeze/boulanger.git
-      dest=/home/vagrant/test
+    - name: download boulanger
+      git: 
+        repo=git@bitbucket.org:trapeze/boulanger.git dest=/home/{{ user }}/projects/boulanger
+        accept_hostkey=yes
+        update=yes
       sudo: false
     - name: retrieve the ssh keys in dir
-      command: ls /host_ssh/id*
-      register: cert_files
-    - name: copy ssh keys to the devbox
-      copy: path=/host_ssh/{{ item }} src=/home/vagrant/.ssh/{{ item }} owner={{ user }} group={{ user }} mode=644 
-      with_items: cert_files.stdout_lines
-      # same as with_items: home_dirs.stdout.split()
+      shell: cp -r /host_ssh/id* /home/vagrant/.ssh/
+      sudo: false
+    #   register: cert_files
+    #- name: copy ssh keys to the devbox
+    #  copy: src={{ item }} dest=/home/vagrant/.ssh/ owner={{ user }} group={{ user }} mode=644 
+    #  with_items: cert_files.stdout_lines
+    #  # same as with_items: home_dirs.stdout.split()
     #- command: pip --no-input install git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
     - name: allow host forwarding
       template:
