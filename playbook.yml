@@ -19,20 +19,11 @@
     - name: retrieve the ssh keys in dir
       shell: cp -r /host_ssh/id* /home/vagrant/.ssh/
       sudo: false
-    #   register: cert_files
-    #- name: copy ssh keys to the devbox
-    #  copy: src={{ item }} dest=/home/vagrant/.ssh/ owner={{ user }} group={{ user }} mode=644 
-    #  with_items: cert_files.stdout_lines
-    #  # same as with_items: home_dirs.stdout.split()
-    #- command: pip --no-input install git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
+
     - name: allow host forwarding
       template:
         src=templates/ssh_config.j2
         dest=/home/{{ user }}/.ssh/config
-    #- name: change ssh folder permissions
-    #  file: path=/home/vagrant/.ssh owner={{ user }} group={{ user }} state=directory recurse=yes
-    # does not work, hangs ...
-    #  pip: name=git+ssh://git@bitbucket.org/trapeze/boulanger.git#egg=boulanger
     - name: add node.js repo to /etc/apt-/sources.list/
       apt_repository: repo=ppa:chris-lea/node.js
       run_once: true
