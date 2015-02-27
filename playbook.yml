@@ -71,13 +71,14 @@
         - nodejs
         - gettext
       run_once: true
-    - name: install npm packages
+    - name: install npm packages grunt, bower, less
       npm: name={{ item }} global=yes
       with_items:
         - grunt
         - grunt-cli
         - bower
         - grunt-init
+        - less
       run_once: true
     - name: install postgres postgis
       apt: name={{ item }} state=present
