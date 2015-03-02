@@ -10,12 +10,16 @@
     git_username: Creative_Dev  # update
     git_email: your@bitbucket.acc  # update
   tasks:
+    - name: create symlink to /usr/local
+      file: dest="/usr/local" src=/local state=link force=yes
+      
     - name: download boulanger
       git: 
         repo=git@bitbucket.org:trapeze/boulanger.git dest=/home/{{ user }}/projects/boulanger
         accept_hostkey=yes
         update=yes
       sudo: false
+      
     - name: retrieve the ssh keys in dir
       shell: cp -r /host_ssh/id* /home/vagrant/.ssh/
       sudo: false
@@ -135,6 +139,9 @@
       lineinfile:
         dest=/home/{{ user }}/.bashrc
         line="export PYTHONPATH=.:..:../lib"
+      run_once: true
+    - name: correct editor selected
+      alternatives: name=editor path=/usr/bin/vim
   handlers:
     - name: update timezone
       command: dpkg-reconfigure --frontend noninteractive tzdata
