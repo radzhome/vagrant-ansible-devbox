@@ -14,7 +14,7 @@ Installs Ubuntu devbox with the following
 * imaging support
 * npm: grunt, grunt-cli, grunt-init
 
-# setup
+# setup on linux / mac
 
 1) Install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 
@@ -48,3 +48,32 @@ Update other options if necessary, i.e. nfs for synced_folders or change memory 
 9) Run: `vagrant up` , when done run `vagrant ssh` to get on.  Run `vagrant provision` to update any provision changes. Run `vagrant suspend` to shut down the box. 
 
 10) Browse a project. You may start django server using: `manage.py runserver 0.0.0.0:8000` and access it at `localhost:9000` on your host machine. Optionally, run `gunicorn wsgi:application` to start your app.
+
+# setup on windows / other
+
+1) Install and provision your VM with ubuntu 14.04 either using Vagrant or manually. See Steps 1 & 2 from linux/ mac install.
+
+Essentially you just need to comment out the following in the Vagrantfile to provision Ubuntu using Vagrant:
+
+    config.vm.provision :ansible do |ansible|
+      ansible.playbook = "playbook.yml"
+      ansible.host_key_checking = false
+      ansible.extra_vars = { ansible_ssh_user: 'vagrant',
+              ansible_connection: 'ssh',
+              ansible_ssh_args: '-o ForwardAgent=yes'}
+    end
+
+2) Once complete, SSH into your instance & install ansible
+
+
+    vagrant ssh
+    sudo pip install ansible
+
+
+3) Install sshpass to be able to log in using password
+
+    sudo apt-get install sshpass
+
+4) Run the playbook locally
+
+    ansible-playbook -i inventory/local playbook.yml  -vvvv
