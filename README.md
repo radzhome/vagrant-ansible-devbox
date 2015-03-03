@@ -77,3 +77,13 @@ Essentially you just need to comment out the following in the Vagrantfile to pro
 4) Run the playbook locally
 
     ansible-playbook -i inventory/local playbook.yml  -vvvv
+
+
+# TODO: Test pg 9.4
+
+deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main
+Update the apt-get repostitor with the following two lines (note the first threes lines are a single continued command line)
+wget --quiet -O - \ 
+https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
+sudo apt-key add - 
+sudo apt-get update
