@@ -74,6 +74,8 @@
         - vim
         - nodejs
         - gettext
+      notify: 
+        - stop nginx
       run_once: true
     - name: install npm packages grunt, bower, less
       npm: name={{ item }} global=yes
@@ -150,9 +152,6 @@
         dpkg-reconfigure unattended
         --frontend noninteractive
         -plow unattended-upgrades
-    - name: restart postgresql
-      service: name=postgresql state=restarted
-    - name: restart nginx
+    - name: stop nginx
       service: name=nginx state=restarted
-    - name: update exim4.conf
-      shell: /usr/sbin/update-exim4.conf
+
