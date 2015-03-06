@@ -28,6 +28,7 @@
       template:
         src=templates/ssh_config.j2
         dest=/home/{{ user }}/.ssh/config
+      run_once: true
     - name: add node.js repo to /etc/apt-/sources.list/
       apt_repository: repo=ppa:chris-lea/node.js
       run_once: true
@@ -126,6 +127,7 @@
       template: 
         src=templates/gitconfig.j2
         dest=/home/{{ user }}/.gitconfig
+     run_once: true
     - name: set timezone variables
       copy: content='America/Toronto'
             dest=/etc/timezone
