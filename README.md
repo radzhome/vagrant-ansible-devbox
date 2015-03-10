@@ -51,6 +51,8 @@ Update other options if necessary, i.e. nfs for synced_folders or change memory 
 
 # setup on windows / other
 
+This setup should work on any os becuase instead of installing ansible on your host os, we install it on the guest instead and let it provision itself.  Instead of trying to install ansible in windows, you can do it this way.
+
 1) Install and provision your VM with ubuntu 14.04 either using Vagrant or manually. See Steps 1 & 2 from linux/ mac install.
 
 Essentially you just need to comment out the following in the Vagrantfile to provision Ubuntu using Vagrant:
