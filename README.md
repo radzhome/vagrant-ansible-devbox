@@ -31,25 +31,34 @@ Installs Ubuntu devbox with the following
     git clone https://github.com/radlws/vagrant-ansible-devbox.git
     cd vagrant-ansible-devbox
 
-5) Edit the Vagrantfile to use 64-bit ubuntu, 32-bit is default. i.e.
+5) Edit the Vagrantfile to use 32-bit or 64-bit ubuntu, change any other confugration. i.e.
 
     config.vm.box = "ubuntu/trusty32"
     # or
     config.vm.box = "ubuntu/trusty64"
 
-Update other options if necessary, i.e. nfs for synced_folders or change memory or cpu amounts.
+Update other otions i.e. nfs for synced_folders or change memory or cpu amounts.
 
-6) Update the playbook.yml vars for git_username and git_email used for bitbucket auth.
+6) (OPTIONAL) Update the playbook.yml vars for git_username and git_email used for bitbucket auth.
 
 7) Include all required private keys in your ~/.ssh host folder, the ones starting with the name id_rsa will be copied over. Keys to consider are for access to AWS, Bitbucket, Trapsshman / project server access.
 
-8) Include shared projects in ~/projects, make the directory it it doesn't exist. Can be empty to start. The same directory will be synced on the guest dev box.
+8) Include shared projects in ~/projects, make the directory it it doesn't exist. Can be empty to start. The same directory will be synced on the guest dev box. Note: *inux sym links don't work on NTFS
 
-9) Run: `vagrant up` , when done run `vagrant ssh` to get on.  Run `vagrant provision` to update any provision changes. Run `vagrant suspend` to shut down the box. 
+9) Start the devbox: 
 
-10) Browse a project. You may start django server using: `manage.py runserver 0.0.0.0:8000` and access it at `localhost:9000` on your host machine. Optionally, run `gunicorn wsgi:application` to start your app.
+    vagrant up 
+
+When done run: 
+    vagrant ssh
+    
+Run `vagrant provision` to update any provision changes any time. Run `vagrant suspend` to put the box on standby, or use `vagrant halt` to shut it down. Note, you can use `vagrant destroy` later when you are done with the box. 
+
+10) Browse a project. You may start django server using: `manage.py runserver 0.0.0.0:8000` and access it at `localhost:9000` on your host machine. You can also use `192.168.222.220:8000` or whatever it is that you configured private networking with.  Optionally, run `gunicorn wsgi:application` to start your app.
 
 # setup on windows / other
+
+Note: Does not work with symlinks, will figure out a way to host files on vm instead for windows users.
 
 This setup should work on any os becuase instead of installing ansible on your host os, we install it on the guest instead and let it provision itself.  Instead of trying to install ansible in windows, you can do it this way.
 
