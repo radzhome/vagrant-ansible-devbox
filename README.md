@@ -37,7 +37,7 @@ Installs Ubuntu devbox with the following
     # or
     config.vm.box = "ubuntu/trusty64"
 
-Update other otions i.e. nfs for synced_folders or change memory or cpu amounts.
+Update other otions i.e. nfs for synced_folders or change memory or cpu amounts. 
 
 6) (OPTIONAL) Update the playbook.yml vars for git_username and git_email used for bitbucket auth.
 
@@ -73,6 +73,8 @@ Essentially you just need to comment out the following in the Vagrantfile to pro
               ansible_connection: 'ssh',
               ansible_ssh_args: '-o ForwardAgent=yes'}
     end
+
+Note: "nfs" synced_folders will be ignored. It's a good idea to use "smb" for this settting. SMB only works for windows hosts, NFS only works for linux hosts.
 
 2) Once complete, SSH into your instance & install ansible
 
