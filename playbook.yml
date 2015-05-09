@@ -146,6 +146,20 @@
       run_once: true
     - name: correct editor selected
       alternatives: name=editor path=/usr/bin/vim
+    - name: create git-prompt file
+      template:
+        src=templates/git-prompt.j2
+        dest=/home/{{ user }}/.git-prompt.sh
+    - name: update bashrc git-prompt
+      lineinfile:
+        dest=/home/{{ user }}/.bashrc
+        line="source ~/.git-prompt.sh"
+      run_once: true
+    - name: update bashrc git-prompt colors
+      lineinfile:
+        dest=/home/{{ user }}/.bashrc
+        line="PS1=\"\[$GREEN\]\t\[$RED\]-\[$BLUE\]\u\[$YELLOW\]\[$YELLOW\]\w\[\033[m\]\[$MAGENTA\]\$(__git_ps1)\[$WHITE\]\$ \""
+      run_once: true
   handlers:
     - name: update timezone
       command: dpkg-reconfigure --frontend noninteractive tzdata
