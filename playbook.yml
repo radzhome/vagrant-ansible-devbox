@@ -10,135 +10,135 @@
     git_username: Creative_Dev  # update
     git_email: your@bitbucket.acc  # update
   tasks:
-#    - name: create symlink to /usr/local
-#      file: dest="/usr/local" src=/local state=link force=yes
-#
-#    - name: download boulanger
-#      git:
-#        repo=git@bitbucket.org:trapeze/boulanger.git dest=/home/{{ user }}/projects/boulanger
-#        accept_hostkey=yes
-#        update=yes
-#      sudo: false
-#
-#    - name: retrieve the ssh keys in dir
-#      shell: cp -r /host_ssh/id* /home/vagrant/.ssh/
-#      sudo: false
-#
-#    - name: allow host forwarding
-#      template:
-#        src=templates/ssh_config.j2
-#        dest=/home/{{ user }}/.ssh/config
-#      run_once: true
-#    - name: add node.js repo to /etc/apt-/sources.list/
-#      apt_repository: repo=ppa:chris-lea/node.js
-#      run_once: true
-#    - name: add ubuntugis repo to /etc/apt/sources.list/
-#      apt_repository: repo=ppa:ubuntugis/ubuntugis-unstable
-#      run_once: true
-#    - name: add git repo to /etc/apt/sources.list/
-#      apt_repository: repo=ppa:git-core/ppa
-#      run_once: true
-#    - name: update apt
-#      apt: update_cache=yes
-#    - apt: upgrade=safe
-#    - name: install image libraries
-#      apt: name={{ item }} state=present
-#      with_items:
-#        - libjpeg-dev
-#        - zlib1g-dev
-#        - libfreetype6-dev
-#      run_once: true
-#    - name: install required python
-#      apt: name={{ item }} state=present
-#      with_items:
-#        - python-pip
-#        - python-dev
-#        - build-essential
-#        - python-setuptools
-#        - openssh-server
-#        - python-imaging
-#        - ipython
-#        - python-docutils
-#        - python-software-properties
-#        - python-mapscript
-#        - python-crypto
-#        - bash-completion
-#      run_once: true
-#    - name: install avahi, exim, git, subversion, nginx, nodejs, vim, gettext
-#      apt: name={{ item }} state=present
-#      with_items:
-#        - avahi-daemon
-#        - exim4
-#        - git-core
-#        - git-svn
-#        - subversion
-#        - vim
-#        - nodejs
-#        - gettext
-#      notify:
-#        - stop nginx
-#      run_once: true
-#    - name: install npm packages grunt, bower, less
-#      npm: name={{ item }} global=yes
-#      with_items:
-#        - grunt
-#        - grunt-cli
-#        - bower
-#        - grunt-init
-#        - less
-#      run_once: true
-#    - name: install postgres postgis
-#      apt: name={{ item }} state=present
-#      with_items:
-#        - postgresql-client-common
-#        - postgresql
-#        - postgis
-#        - python-psycopg2
-#        - python-gdal
-#        - libproj-dev
-#        - gdal-bin
-#        - libpq-dev
-#        - postgresql-9.3-postgis-scripts
-#      run_once: true
-#    - name: start postgres and enable at boot
-#      service: name=postgresql
-#               enabled=yes
-#               state=started
-#      run_once: true
-#    - name: install unattended upgrades package
-#      apt: name=unattended-upgrades
-#      notify:
-#        - dpkg reconfigue unattended
-#      run_once: true
-#    - pip: name=setuptools
-#    - pip: name=pip version=6.0.6
-#    - pip: name=Pillow
-#    - pip: name=fabric
-#    - pip: name=gunicorn
-#    - pip: name=fogbugz
-#    - pip: name=BeautifulSoup
-#    - name: create locale, ensure exists
-#      locale_gen: name=en_CA.UTF-8 state=present
-#    - command: update-locale LANG=en_CA.UTF-8 # usr/sbin
-#    - name: update hostname
-#      hostname: name={{ host_name }}
-#    - name: create gitconfig
-#      sudo: false
-#      template:
-#        src=templates/gitconfig.j2
-#        dest=/home/{{ user }}/.gitconfig
-#     run_once: true
-#    - name: set timezone variables
-#      copy: content='America/Toronto'
-#            dest=/etc/timezone
-#            owner=root
-#            group=root
-#            mode=0644
-#            backup=yes
-#      ignore_errors: yes
-#      notify:
-#        - update timezone
-#      run_once: true
+    - name: create symlink to /usr/local
+      file: dest="/usr/local" src=/local state=link force=yes
+
+    - name: download boulanger
+      git:
+        repo=git@bitbucket.org:trapeze/boulanger.git dest=/home/{{ user }}/projects/boulanger
+        accept_hostkey=yes
+        update=yes
+      sudo: false
+
+    - name: retrieve the ssh keys in dir
+      shell: cp -r /host_ssh/id* /home/vagrant/.ssh/
+      sudo: false
+
+    - name: allow host forwarding
+      template:
+        src=templates/ssh_config.j2
+        dest=/home/{{ user }}/.ssh/config
+      run_once: true
+    - name: add node.js repo to /etc/apt-/sources.list/
+      apt_repository: repo=ppa:chris-lea/node.js
+      run_once: true
+    - name: add ubuntugis repo to /etc/apt/sources.list/
+      apt_repository: repo=ppa:ubuntugis/ubuntugis-unstable
+      run_once: true
+    - name: add git repo to /etc/apt/sources.list/
+      apt_repository: repo=ppa:git-core/ppa
+      run_once: true
+    - name: update apt
+      apt: update_cache=yes
+    - apt: upgrade=safe
+    - name: install image libraries
+      apt: name={{ item }} state=present
+      with_items:
+        - libjpeg-dev
+        - zlib1g-dev
+        - libfreetype6-dev
+      run_once: true
+    - name: install required python
+      apt: name={{ item }} state=present
+      with_items:
+        - python-pip
+        - python-dev
+        - build-essential
+        - python-setuptools
+        - openssh-server
+        - python-imaging
+        - ipython
+        - python-docutils
+        - python-software-properties
+        - python-mapscript
+        - python-crypto
+        - bash-completion
+      run_once: true
+    - name: install avahi, exim, git, subversion, nginx, nodejs, vim, gettext
+      apt: name={{ item }} state=present
+      with_items:
+        - avahi-daemon
+        - exim4
+        - git-core
+        - git-svn
+        - subversion
+        - vim
+        - nodejs
+        - gettext
+      notify:
+        - stop nginx
+      run_once: true
+    - name: install npm packages grunt, bower, less
+      npm: name={{ item }} global=yes
+      with_items:
+        - grunt
+        - grunt-cli
+        - bower
+        - grunt-init
+        - less
+      run_once: true
+    - name: install postgres postgis
+      apt: name={{ item }} state=present
+      with_items:
+        - postgresql-client-common
+        - postgresql
+        - postgis
+        - python-psycopg2
+        - python-gdal
+        - libproj-dev
+        - gdal-bin
+        - libpq-dev
+        - postgresql-9.3-postgis-scripts
+      run_once: true
+    - name: start postgres and enable at boot
+      service: name=postgresql
+               enabled=yes
+               state=started
+      run_once: true
+    - name: install unattended upgrades package
+      apt: name=unattended-upgrades
+      notify:
+        - dpkg reconfigue unattended
+      run_once: true
+    - pip: name=setuptools
+    - pip: name=pip version=6.0.6
+    - pip: name=Pillow
+    - pip: name=fabric
+    - pip: name=gunicorn
+    - pip: name=fogbugz
+    - pip: name=BeautifulSoup
+    - name: create locale, ensure exists
+      locale_gen: name=en_CA.UTF-8 state=present
+    - command: update-locale LANG=en_CA.UTF-8 # usr/sbin
+    - name: update hostname
+      hostname: name={{ host_name }}
+    - name: create gitconfig
+      sudo: false
+      template:
+        src=templates/gitconfig.j2
+        dest=/home/{{ user }}/.gitconfig
+     run_once: true
+    - name: set timezone variables
+      copy: content='America/Toronto'
+            dest=/etc/timezone
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+      ignore_errors: yes
+      notify:
+        - update timezone
+      run_once: true
     - name: update bashrc PYTHONPATH
       lineinfile:
         dest=/home/{{ user }}/.bashrc
@@ -151,7 +151,7 @@
         src=templates/git-prompt.sh
         dest=/home/{{ user }}/.git-prompt.sh
       run_once: true
-    - name: update bashrc git-prompt
+    - name: update bashrc git-prompt to see your active branch
       lineinfile:
         dest=/home/{{ user }}/.bashrc
         line="source ~/.git-prompt.sh"
