@@ -150,7 +150,6 @@
       copy:
         src=templates/git-prompt.sh
         dest=/home/{{ user }}/.git-prompt.sh
-        #owner=foo group=foo mode=0644
     - name: update bashrc git-prompt
       lineinfile:
         dest=/home/{{ user }}/.bashrc
@@ -159,13 +158,12 @@
     - name: update bashrc git-prompt colors
       lineinfile:
         dest=/home/{{ user }}/.bashrc
-        line="PS1=\"\[$GREEN\]\t\[$RED\]-\[$BLUE\]\u\[$YELLOW\]\[$YELLOW\]\w\[\033[m\]\[$MAGENTA\]\$(__git_ps1)\[$WHITE\]\$ \""
+        line="PS1=\"\\t-\u\w\[^[[m\]\$(__git_ps1)$ \""  #PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
       run_once: true
     - name: create git-completion file
       copy:
         src=templates/git-completion.sh
         dest=/home/{{ user }}/.git-completion.sh
-        #owner=foo group=foo mode=0644
     - name: update bashrc git-completion
       lineinfile:
         dest: /home/{{ user }}/.bashrc
@@ -174,6 +172,7 @@
         - { line: 'if [ -f ~/.git-completion.sh ]; then' }
         - { line: '     . ~/.git-completion.sh' }
         - { line: 'fi' }
+        - { line: '' }
     - name: Provision Done.
       debug:
         msg: "Run 'source ~/.bashrc' if provisioning localhost."
