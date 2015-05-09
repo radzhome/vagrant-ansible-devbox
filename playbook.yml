@@ -14,7 +14,7 @@
 #      file: dest="/usr/local" src=/local state=link force=yes
 #
 #    - name: download boulanger
-#      git: 
+#      git:
 #        repo=git@bitbucket.org:trapeze/boulanger.git dest=/home/{{ user }}/projects/boulanger
 #        accept_hostkey=yes
 #        update=yes
@@ -147,9 +147,10 @@
     - name: correct editor selected
       alternatives: name=editor path=/usr/bin/vim
     - name: create git-prompt file
-      template:
+      copy:
         src=templates/git-prompt.sh
         dest=/home/{{ user }}/.git-prompt.sh
+        #owner=foo group=foo mode=0644
     - name: update bashrc git-prompt
       lineinfile:
         dest=/home/{{ user }}/.bashrc
@@ -161,9 +162,10 @@
         line="PS1=\"\[$GREEN\]\t\[$RED\]-\[$BLUE\]\u\[$YELLOW\]\[$YELLOW\]\w\[\033[m\]\[$MAGENTA\]\$(__git_ps1)\[$WHITE\]\$ \""
       run_once: true
     - name: create git-completion file
-      template:
+      copy:
         src=templates/git-completion.sh
         dest=/home/{{ user }}/.git-completion.sh
+        #owner=foo group=foo mode=0644
     - name: update bashrc git-completion
       lineinfile:
         dest: /home/{{ user }}/.bashrc
