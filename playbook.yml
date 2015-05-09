@@ -5,7 +5,7 @@
   user: vagrant # (use default: vagrant) 
   sudo_user: root  # (use default: root)
   vars:
-    host_name: ubuntu-vagrant-devbox
+    host_name: ubuntu-devbox
     user: vagrant
     git_username: Creative_Dev  # update
     git_email: your@bitbucket.acc  # update
@@ -150,29 +150,27 @@
       copy:
         src=templates/git-prompt.sh
         dest=/home/{{ user }}/.git-prompt.sh
+      run_once: true
     - name: update bashrc git-prompt
       lineinfile:
         dest=/home/{{ user }}/.bashrc
         line="source ~/.git-prompt.sh"
       run_once: true
-    - name: update bashrc git-prompt colors
+    - name: update bashrc git-prompt set PS1
       lineinfile:
         dest=/home/{{ user }}/.bashrc
-        line="PS1=\""\t"-\u\w\[^[[m\]\$(__git_ps1)$ \""  #PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
+        line="PS1=\"\T-\u@\h \W$(__git_ps1 \" (%s)\")\$ \""
       run_once: true
     - name: create git-completion file
       copy:
         src=templates/git-completion.sh
         dest=/home/{{ user }}/.git-completion.sh
+      run_once: true
     - name: update bashrc git-completion
       lineinfile:
         dest: /home/{{ user }}/.bashrc
-        line: "{{ item.line }}"
-      with_items:
-        - { line: 'if [ -f ~/.git-completion.sh ]; then' }
-        - { line: '     . ~/.git-completion.sh' }
-        - { line: 'fi' }
-        - { line: '' }
+        line: "if [ -f ~/.git-completion.sh ]; then . ~/.git-completion.sh; fi"
+      run_once: true
     - name: Provision Done.
       debug:
         msg: "Run 'source ~/.bashrc' if provisioning localhost."
