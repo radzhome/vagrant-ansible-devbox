@@ -174,7 +174,7 @@
         - { line: 'fi' }
     - name: Provision Done.
       debug:
-        msg: "Run 'source ~/.bashrc' if provisioning self."
+        msg: "Run 'source ~/.bashrc' if provisioning localhost."
   handlers:
     - name: update timezone
       command: dpkg-reconfigure --frontend noninteractive tzdata
