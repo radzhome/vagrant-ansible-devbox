@@ -158,7 +158,7 @@
     - name: update bashrc git-prompt colors
       lineinfile:
         dest=/home/{{ user }}/.bashrc
-        line="PS1=\"\\t-\u\w\[^[[m\]\$(__git_ps1)$ \""  #PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
+        line="PS1=\""\t"-\u\w\[^[[m\]\$(__git_ps1)$ \""  #PS1='\u@\h \W$(__git_ps1 " (%s)")\$ '
       run_once: true
     - name: create git-completion file
       copy:
