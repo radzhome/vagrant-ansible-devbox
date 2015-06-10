@@ -56,15 +56,21 @@ Run `vagrant provision` to update any provision changes any time. Run `vagrant s
 
 10) Browse a project. You may start django server using: `manage.py runserver 0.0.0.0:8000` and access it at `localhost:9000` on your host machine. You can also use `192.168.222.220:8000` or whatever it is that you configured private networking with.  Optionally, run `gunicorn wsgi:application` to start your app.
 
-# setup on windows / other
+# setup on windows
 
-Note: Does not work with symlinks, will figure out a way to host files on vm instead for windows users.
+CONCERNS:
 
-This setup should work on any os becuase instead of installing ansible on your host os, we install it on the guest instead and let it provision itself.  Instead of trying to install ansible in windows, you can do it this way.
+ * home directory not same as unix system, how to solve this for ssh keys and projects? 
 
-1) Install and provision your VM with ubuntu 14.04 either using Vagrant or manually. See Steps 1 & 2 from linux/ mac install.
+ * how will NFS work, windows fs is case insenstive and does not support symbolic links of projects
 
-Essentially you just need to comment out the following in the Vagrantfile to provision Ubuntu using Vagrant:
+
+1) Install and provision your VM with ubuntu 14.04 either using Vagrant or manually.
+
+     See Steps 1) & 2) from linux/ mac install.  
+     Also follow step 4) from the linux/ mac install.
+
+You need to comment out /remove the following in the Vagrantfile to provision Ubuntu using Vagrant:
 
     config.vm.provision :ansible do |ansible|
       ansible.playbook = "playbook.yml"
@@ -74,19 +80,40 @@ Essentially you just need to comment out the following in the Vagrantfile to pro
               ansible_ssh_args: '-o ForwardAgent=yes'}
     end
 
-Note: "nfs" synced_folders will be ignored. It's a good idea to use "smb" for this settting. SMB only works for windows hosts, NFS only works for linux hosts.
+This will disable the ansible provision to happen from your host os. Also comment out / change the virtualbox filesharing in the VagrantFile:
+
+    config.vm.synced_folder ".", "/vagrant", disabled: true
+    config.vm.synced_folder "~/projects", "/home/vagrant/projects", nfs: true #nfs requires private network
+    config.vm.synced_folder "~/.ssh", "/host_ssh", create: true #, nfs: true
+
+Commenting /removing all of this out will revert back to defaults.
 
 2) Once complete, SSH into your instance & install ansible
 
-
+    vagrant up
     vagrant ssh
     sudo pip install ansible
 
 
-3) Install sshpass to be able to log in using password
+3) Install sshpass to be able to log in using password. This allows ansible to ssh localhost and provision.
 
     sudo apt-get install sshpass
 
-4) Run the playbook locally
+NOTE: user / pass is vagrant / vagrant, might not be required.
+
+4) Edit the playbook, comment out the following parts, which will not work in windwos (step 2):
+
+        - name: retrieve the certs in dir
+          shell: cp -r /host_ssh/id* /home/vagrant/.ssh/
+          sudo: false
+
+This tries to copy the uers ssh keys, will not work in windows.
+
+6) Disable host key checking:
+    export ANSIBLE_HOST_KEY_CHECKING=False
+
+7) Run the playbook locally
 
     ansible-playbook -i inventory/local playbook.yml  -vvvv
+
+    Note: If you get executable file errors, you will have to copy the shared /vagrant directory to local directory on the guest machine and remove the executable permission.
