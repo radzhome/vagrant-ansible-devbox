@@ -122,12 +122,15 @@
     - command: update-locale LANG=en_CA.UTF-8 # usr/sbin
     - name: update hostname
       hostname: name={{ host_name }}
+    - stat: path=/home/{{ user }}/.gitconfig
+      register: p
     - name: create gitconfig
       sudo: false
       template:
         src=templates/gitconfig.j2
         dest=/home/{{ user }}/.gitconfig
-     run_once: true
+      when: p.stat.exists
+      run_once: true
     - name: set timezone variables
       copy: content='America/Toronto'
             dest=/etc/timezone
