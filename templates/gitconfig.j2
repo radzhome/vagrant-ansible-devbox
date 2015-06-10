@@ -1,6 +1,36 @@
+[color]
+    ui = auto                   # turns on colours
+[core]
+    editor = "vim"              # makes vim your default commit editor, you can change this to any editor
+    excludesfile = ~/.gitignore # specifies a global ignore file
+    autocrlf = false            # ensure git treats line endings properly
+[push]
+    default = current           # pulls from the current branch by default
+
+
+# Configuration below is optional. Feel free to customize
+
+
+[alias]
+    st = status -s              # more concise status
+    co = checkout
+    ci = commit
+
+
+# see a 'graph' of merges in the branch
+graph = log --graph --pretty=oneline
+
+
+# ignore css and minified js in diffs
+ldiff = !git diff -- $(git diff --name-only | grep -Ev \"*(min\\.js|\\.css)\")
+
+
+# see the commits you're going to pull into your repo. Assumes remote is called origin
+incoming = !git fetch && git log ..origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3)
+
+
 [user]
         email = {{ git_email }}
         name = {{ git_username }}
 [push]
         default = simple
-
