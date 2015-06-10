@@ -129,7 +129,7 @@
       template:
         src=templates/gitconfig.j2
         dest=/home/{{ user }}/.gitconfig
-      when: p.stat.exists
+      when: p.stat.exists == False
       run_once: true
     - name: set timezone variables
       copy: content='America/Toronto'
