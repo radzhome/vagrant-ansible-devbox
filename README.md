@@ -119,7 +119,7 @@ This tries to copy the uers ssh keys, will not work in windows.
     Note: If you get executable file errors, you will have to copy the shared /vagrant directory to local directory on the guest machine and remove the executable permission.
 
 
-`
+```
 COLOR SUPPORT
 
 #export PS1="\[\e[34m\]\u\[\e[m\]@\[\e[33;40m\]\h\[\e[m\]:\w\\$ "
@@ -154,4 +154,4 @@ unset color_prompt force_color_prompt
       test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
       alias ls='ls --color=auto'
  fi
- `
+ ```
