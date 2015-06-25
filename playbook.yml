@@ -5,10 +5,10 @@
   user: vagrant # (use default: vagrant) 
   sudo_user: root  # (use default: root)
   vars:
-    host_name: ubuntu-devbox
+    host_name: ubuntu-dev
     user: vagrant
-    git_username: Creative_Dev  # update
-    git_email: your@bitbucket.acc  # update
+    git_username: gituser  # update
+    git_email: me@gmail.com  # update
   tasks:
     - name: create symlink to /usr/local
       file: dest="/usr/local" src=/local state=link force=yes
