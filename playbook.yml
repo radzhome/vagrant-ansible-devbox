@@ -13,12 +13,12 @@
     - name: create symlink to /usr/local
       file: dest="/usr/local" src=/local state=link force=yes
 
-    - name: download boulanger
-      git:
-        repo=git@bitbucket.org:trapeze/boulanger.git dest=/home/{{ user }}/projects/boulanger
-        accept_hostkey=yes
-        update=yes
-      sudo: false
+    #- name: download a repo from bitbucket (sample)
+    #  git:
+    #    repo=git@bitbucket.org:radzhome/test_project.git dest=/home/{{ user }}/projects/test_project
+    #    accept_hostkey=yes
+    #    update=yes
+    #  sudo: false
 
     - name: retrieve the ssh keys in dir
       shell: cp -r /host_ssh/id* /home/vagrant/.ssh/
