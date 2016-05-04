@@ -101,7 +101,7 @@ Commenting /removing all of this out will revert back to defaults.
 
 NOTE: user / pass is vagrant / vagrant, might not be required.
 
-4) Edit the playbook, comment out the following parts, which will not work in windwos (step 2):
+4) Edit the playbook, comment out the following parts, which will not work in windows (step 2):
 
         - name: retrieve the certs in dir
           shell: cp -r /host_ssh/id* /home/vagrant/.ssh/
