@@ -1,0 +1,12 @@
+[Unit]
+Description=Pure-FTPd Authentication server
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=root
+ExecStart=/sbin/pure-authd -s /var/run/ftpd.sock -B -r /usr/local/bin/auth_pureftpd_users.py
+ExecStopPost=-/bin/pkill -u root -f "/sbin/pure-authd -s /var/run/ftpd.sock -B -r /usr/local/bin/auth_pureftpd_users.py"
+
+[Install]
+WantedBy=multi-user.target pure-ftpd.target

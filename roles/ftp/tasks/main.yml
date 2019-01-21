@@ -1,0 +1,152 @@
+---
+# Logging for ftp is found in:
+# /var/log/uploadscript.log
+# grep 'Authentication failed for user' /var/log/messages
+# /var/log/pureftpd.log
+# /var/log/auth-pureftpd-users.log  # Auth via API
+# more /var/log/messages | grep pure-ftpd
+# pure-ftpwho # all connected users
+
+# Only passive mode is supported via load balancer
+# ftp> passive  # Passive mode off.
+# Yields: I won't open a connection to 10.0.2.15 (only to 135.0.54.189)
+# ftp: bind: Address already in use
+
+
+- name: /etc/sudoers.d/ftp-wheel
+  copy: src=../files/etc/sudoers.d/ftp-wheel
+        dest=/etc/sudoers.d/ftp-wheel mode=444 owner=root group=root
+  tags:
+    - ftp
+
+- name: add group ftp exists
+  group:
+    name: "{{ ftp_user }}"
+    gid: "{{ ftp_group_id }}"
+    state: present
+  tags:
+    - ftp
+
+- name: add ftp user
+  user:
+    name: "{{ ftp_user }}"
+    comment: pmdigital FTP
+    uid: "{{ ftp_user_id }}"
+    group: "{{ ftp_user }}"
+    createhome: yes
+    home: "/home/{{ ftp_user }}"
+  tags:
+    - ftp
+
+# s3cmd 2.0.1 requires python-magic, which is not installed. (for checking file types)
+- name: install s3cmd
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-magic
+    - s3cmd
+  tags:
+    - ftp
+
+
+# NOTE: pip install of datadog will come from common requirements
+- name: install python-magic (now via pip)
+  pip:
+    name: python-magic
+    version: 0.4.15
+
+- name: /etc/s3cfg
+  template: src=s3cfg dest=/etc/s3cfg owner=root group=root mode=444
+  tags:
+    - ftp
+
+- name: root/.s3cfg
+  template: src=s3cfg dest=~root/.s3cfg owner=root group=root mode=600
+  tags:
+    - ftp
+
+- name: install pure-ftpd
+  apt: name=pure-ftpd state=present
+  tags:
+    - ftp
+
+# Any changes to ftp conf will restart pure-ftpd later
+- name: /etc/pure-ftpd/pure-ftpd.conf
+  template: src=pure-ftpd.conf
+            dest=/etc/pure-ftpd/pure-ftpd.conf mode=444 owner=root group=root
+  register: pure_ftpd_conf
+  tags:
+    - ftp
+
+# File is required to be there, even though not used by pure-ftpd
+- name: touch /etc/ftpusers
+  file:
+    path: /etc/ftpusers
+    state: touch
+    mode: "u=rw,g=r,o=r"
+
+# Copy scripts required for services
+
+- name: /usr/local/bin/prefix_filename.py for pure-ftpd-uploads.sh for pureuploadscript service
+  copy: src=../files/usr/local/bin/prefix_filename.py
+        dest=/usr/local/bin/prefix_filename.py mode=555 owner=root group=root
+  tags:
+    - ftp
+
+- name: /usr/local/bin/pure-ftpd-uploads.sh to call s3cmd with timestamp in file for pureuploadscript service
+  template: src=pure-ftpd-uploads.sh
+            dest=/usr/local/bin/pure-ftpd-uploads.sh mode=555 owner=root group=root
+  tags:
+    - ftp
+
+- name: /usr/local/bin/auth_pureftpd_users.py for pure-authd service
+  template: src=auth_pureftpd_users.py
+            dest=/usr/local/bin/auth_pureftpd_users.py mode=555 owner=root group=root
+  tags:
+    - ftp
+
+# Copy service files
+
+- name: /usr/lib/systemd/system/pure-ftpd.service
+  copy: src=../files/etc/systemd/system/multi-user.target.wants/pure-ftpd.service
+        dest=/usr/lib/systemd/system/pure-ftpd.service mode=755 owner=root group=root
+  notify: reload systemd
+  tags:
+    - ftp
+
+- name: /usr/lib/systemd/system/pureuploadscript.service
+  copy: src=../files/etc/systemd/system/multi-user.target.wants/pureuploadscript.service
+        dest=/usr/lib/systemd/system/pureuploadscript.service mode=755 owner=root group=root
+  notify: reload systemd
+  tags:
+    - ftp
+
+- name: /usr/lib/systemd/system/pure-authd.service
+  copy: src=../files/etc/systemd/system/multi-user.target.wants/pure-authd.service
+        dest=/usr/lib/systemd/system/pure-authd.service mode=755 owner=root group=root
+  notify: reload systemd
+  tags:
+    - ftp
+
+# Start and enable services
+
+- name: pureuploadscript service
+  systemd: name=pureuploadscript state=started enabled=yes daemon_reload=yes
+  tags:
+    - ftp
+
+- name: pure-authd service
+  systemd: name=pure-authd state=started enabled=yes daemon_reload=yes
+  tags:
+    - ftp
+
+- name: service pure-ftpd start
+  systemd: name=pure-ftpd state=started enabled=yes daemon_reload=yes
+  when: not pure_ftpd_conf.changed
+  tags:
+    - ftp
+
+- name: service pure-ftpd restart
+  systemd: name=pure-ftpd state=restarted enabled=yes daemon_reload=yes
+  when: pure_ftpd_conf.changed
+  tags:
+    - ftp

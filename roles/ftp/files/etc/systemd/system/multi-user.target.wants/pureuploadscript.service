@@ -1,0 +1,12 @@
+[Unit]
+Description=pureuploadscript Pure-FTPd FTP server trigger on upload script
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=root
+ExecStart=/sbin/pure-uploadscript -B -r /usr/local/bin/pure-ftpd-uploads.sh
+ExecStopPost=-/bin/pkill -u root -f "/sbin/pure-uploadscript -B -r /usr/local/bin/pure-ftpd-uploads.sh"
+
+[Install]
+WantedBy=multi-user.target pure-ftpd.target
